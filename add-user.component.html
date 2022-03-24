@@ -1,0 +1,147 @@
+<!-- main app container -->
+<div class="card text-center m-3">
+  <h5 class="card-header">User Form</h5>
+  <div class="card-body">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <label for="firstName" class="col-sm-1 col-form-label">
+          First Name</label>
+        <div class="col-sm-5">
+          <input type="text" formControlName="firstName" class="form-control" />
+          <!-- <div *ngIf="f.firstName.touched && f.firstName.invalid">   -->
+          <div class="text-danger" *ngIf="
+              (f.firstName.touched || submitted) && f.firstName.errors?.required
+            ">
+            First name is required.
+          </div>
+          <!-- <div *ngIf="f.lastName.errors.pattern">Please, Enter 10 digit Mobile Number.</div>   -->
+        </div>
+
+        <label for="lastName" class="col-sm-1 col-form-label">Last Name</label>
+        <div class="col-sm-5">
+          <input type="text" formControlName="lastName" class="form-control" />
+          <!-- <div *ngIf="f.lastName.touched && f.lastName.invalid">   -->
+          <div class="text-danger" *ngIf="
+              (f.lastName.touched || submitted) && f.lastName.errors?.required
+            ">
+            Last name is required.
+          </div>
+          <!-- <div *ngIf="f.lastName.errors.pattern">Please, Enter 10 digit Mobile Number.</div>   -->
+          <!-- </div>  -->
+        </div>
+      </div>
+      <br />
+
+      <div class="form-row">
+        <label for="dob" class="col-sm-1 col-form-label">Date of Birth</label>
+        <div class="col-sm-5">
+          <input type="date" formControlName="dob" class="form-control" />
+          <!-- <div *ngIf="f.dob.touched && f.dob.invalid" >   -->
+          <div class="text-danger" *ngIf="(f.dob.touched || submitted) && f.dob.errors?.required">
+            Date of Birth is required.
+          </div>
+        </div>
+
+        <label for="phoneNumber" class="col-sm-1 col-form-label">Phone Number</label>
+        <div class="col-sm-5">
+          <input (keypress)="numberOnly($event)" type="text" class="form-control" formControlName="phoneNumber"
+            maxlength="10" />
+          <div class="text-danger" *ngIf="
+              (f.phoneNumber.touched || submitted
+              )  && f.phoneNumber.invalid">
+            <div *ngIf="f.phoneNumber.errors.required">
+              Mobile Number is required.
+            </div>
+            <div class="text-danger" *ngIf="f.phoneNumber.errors.pattern">
+              Please, Enter 10 digit Mobile Number.
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+
+      <div class="form-row">
+        <label for="gender" class="col-sm-1 col-form-label inline">Gender</label>
+        <div class="col-sm-5" style="display: flex; padding: 7px">
+          <div class="col-sm-2 custom-control custom-radio custom-control-inline col align-self-start">
+            <input type="radio" id="male" checked name="gender" class="custom-control-input" />
+            <label class="custom-control-label" for="male">Male</label>
+          </div>
+          <div class="col-sm-2 custom-control custom-radio custom-control-inline col align-self-start">
+            <input type="radio" id="female" name="gender" class="custom-control-input" />
+            <label class="custom-control-label" for="female">Female</label>
+          </div>
+        </div>
+
+        <label for="email" class="col-sm-1 col-form-label"> Email</label>
+        <div class="col-sm-5">
+          <input type="text" class="form-control" formControlName="email" />
+          <div class="text-danger" *ngIf="(f.email.touched || submitted)  && f.email.invalid">
+            <div *ngIf="f.email.errors.required">Email is required</div>
+            <div class="text-danger" *ngIf="f.email.errors.pattern">Email must be a valid email address</div>
+          </div>
+        </div>
+      </div>
+      <br />
+
+      <div class="form-row">
+        <label for="others" class="col-sm-1 col-form-label">Others</label>
+        <div class="col-sm-5">
+          <select formControlName="others" class="form-control">
+            <option disabled>Select Others</option>
+            <option>Choose Others</option>
+            <option *ngFor="let web of othersList">{{web}}</option>
+          </select>
+          <div *ngIf="f.others.touched && f.others.invalid" class="alert alert-danger">
+            <div *ngIf="f.others.errors.required">Name is required.</div>
+          </div>
+        </div>
+      </div>
+      <br>
+
+
+      <div class="form-row">
+        <label for="password" class="col-sm-1 col-form-label">Password</label>
+        <div class="col-sm-5">
+          <input type="password" formControlName="password" class="form-control" />
+          <div *ngIf="submitted && f.password.errors" class="text-danger">
+            <div *ngIf="(f.password.touched || submitted) && f.password.errors.required">Password is required</div>
+            <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+          </div>
+        </div>
+
+
+        <label for="confirmPassword" class="col-sm-1 col-form-label">Confirm Password</label>
+        <div class="col-sm-5">
+          <input type="password" formControlName="confirmPassword" class="form-control" />
+          <div *ngIf="submitted">
+            <div class="text-danger" *ngIf="(f.confirmPassword.touched  || submitted) && f.confirmPassword.invalid">
+
+              Confirm Password is required
+            </div>
+            <div class="text-danger"
+              *ngIf="!(f.confirmPassword.touched && f.confirmPassword.invalid) && (registerForm.value.password !== registerForm.value.confirmPassword)">
+              Passwords doesnot match
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+
+      <div class="form-group form-check col-md-2">
+        <input type="checkbox" formControlName="acceptTerms" id="acceptTerms" class="form-check-input"
+          [ngClass]="{ 'is-invalid': submitted && f.acceptTerms.errors }" />
+        <label for="acceptTerms" class="form-check-label">Accept Terms & Conditions</label>
+        <div *ngIf="f.acceptTerms.errors && submitted" class="invalid-feedback">
+          Accept Ts & Cs is required
+        </div>
+      </div>
+      <div class="text-center">
+        <button class="btn btn-primary mr-1" type="submit">Register</button>
+        <button class="btn btn-success" type="button" [routerLink]="['/table']">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
